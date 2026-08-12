@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "emitDeclarationOnly": true,
+    "rootDir": "src",
+    "composite": false,
+    "noEmit": false,
+    "removeComments": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/__test/",
+    "src/test-setup.ts",
+    "dist/",
+    "node_modules/",
+    "*.test.ts",
+    "*.spec.ts"
+  ]
+}

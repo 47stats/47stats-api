@@ -1,0 +1,11 @@
+src/
+.env*
+index.*
+node_modules/
+.prettierrc
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+yarn.lock
+*.log
+*.tmp

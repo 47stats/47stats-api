@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>47stats-api TEST</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <p id="/auth/token" />
+  <p id="/area/class" />
+  <p id="/area/count" />
+  <p id="/area/info" />
+  <p id="/area/list" />
+
+  <p id="/feature/circle" />
+  <p id="/feature/donut" />
+
+  <p id="/map/point" />
+  <p id="/map/polygon" />
+
+  <p id="/datalist/count" />
+  <p id="/datalist/row" />
+  <p id="/datalist/list" />
+
+  <p id="/group/circle" />
+  <p id="/group/polygon" />
+
+  <p id="/rank/ave" />
+  <p id="/rank/frequency" />
+  <p id="/rank/range" />
+
+  <p id="/summary/ave" />
+  <p id="/summary/count" />
+  <p id="/summary/max" />
+  <p id="/summary/min" />
+  <p id="/summary/stdev" />
+  <p id="/summary/total" />
+
+  <script type="module">
+    import {
+      APIEnv,
+      getToken,
+      getAreaClass, getAreaCount, getAreaInfo, getAreaList,
+      getCircle, getDonut,
+      getDatamapPoint, getDatamapPolygon,
+      getDatalistCount, getDatalistRow, getDatalistList,
+      getGroupCircle, getGroupPolygon,
+      getRankAvg, getFrequency, getRange,
+      getAverage, getCount, getMax, getMin, getStdev, getTotal,
+  } from "/dist/index.js"
+
+    APIEnv.API_URL = import.meta.env.VITE_STATS_API_URL;
+    APIEnv.API_KEY = import.meta.env.VITE_STATS_API_KEY;
+
+    const baseParam = {
+      database: "KOK",
+      store: "CITY",
+      column: ["N1", "N3", "N5"],
+      limit: 10
+    };
+    const $ = (id, text) => {
+      document.getElementById(id).innerHTML = `<h3>${id}</h3>${text || 'NUL'}`;
+    }
+
+    (async () => {
+      $("/auth/token", JSON.stringify(await getToken()));
+      $("/area/class", JSON.stringify(await getAreaClass(Object.assign({}, baseParam))));
+      $("/area/count", JSON.stringify(await getAreaCount(Object.assign({}, baseParam))));
+      $("/area/info", JSON.stringify(await getAreaInfo(Object.assign({ area: "40106" }, baseParam))));
+      $("/area/list", JSON.stringify(await getAreaList(Object.assign({}, baseParam))));
+
+      $("/feature/circle", JSON.stringify(await getCircle({ longitude: 130.882741, latitude: 33.882006, radius: 3000 })));
+      $("/feature/donut", JSON.stringify(await getDonut({ longitude: 130.882741, latitude: 33.882006, outer: 1000, inner: 500 })));
+
+      $("/map/point", JSON.stringify(await getDatamapPoint(Object.assign({ area: "40106" }, baseParam))));
+      $("/map/polygon", JSON.stringify(await getDatamapPolygon(Object.assign({ area: "40106" }, baseParam))));
+
+      $("/datalist/count", JSON.stringify(await getDatalistCount(Object.assign({ area: "40" }, baseParam))));
+      $("/datalist/row", JSON.stringify(await getDatalistRow(Object.assign({ code: "40106" }, baseParam))));
+      $("/datalist/list", JSON.stringify(await getDatalistList(Object.assign({ area: "40" }, baseParam))));
+
+      $("/group/circle", JSON.stringify(await getGroupCircle(Object.assign({ longitude: 130.882741, latitude: 33.882006, radius: 500 }, baseParam))));
+      $("/group/polygon", JSON.stringify(await getGroupPolygon(Object.assign({
+        polygon: JSON.stringify({
+          type: "Polygon",
+          coordinates: [[[130.881618, 33.883977], [130.881049, 33.881901], [130.884321, 33.88118], [130.884879, 33.883326], [130.881618, 33.883977]]]
+        })
+      }, baseParam))));
+
+      $("/rank/ave", JSON.stringify(await getRankAvg(Object.assign({}, baseParam, { column:"N1"}))));
+      $("/rank/frequency", JSON.stringify(await getFrequency(Object.assign({ division:5 }, baseParam, { column:"N1"}))));
+      $("/rank/range", JSON.stringify(await getRange(Object.assign({ division:5 }, baseParam, { column:"N1"}))));
+
+      $("/summary/ave", JSON.stringify(await getAverage(Object.assign({}, baseParam))));
+      $("/summary/count", JSON.stringify(await getCount(Object.assign({}, baseParam))));
+      $("/summary/max", JSON.stringify(await getMax(Object.assign({}, baseParam))));
+      $("/summary/min", JSON.stringify(await getMin(Object.assign({}, baseParam))));
+      $("/summary/stdev", JSON.stringify(await getStdev(Object.assign({}, baseParam))));
+      $("/summary/total", JSON.stringify(await getTotal(Object.assign({}, baseParam))));
+    })();
+  </script>
+</body>
+
+</html>
